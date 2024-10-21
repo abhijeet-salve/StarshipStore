@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { View, Text, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
-import { SafeAreaView } from "react-native-safe-area-context";
 import CheckoutScreen from "./CheckoutScreen";
 import HomeScreen from "./HomeScreen";
 import SearchScreen from "./SearchScreen";
@@ -30,7 +29,7 @@ const CartIconWithBadge = ({ color }: { color: string }) => {
 
 const MainScreen = () => {
   return (
-    <SafeAreaView style={styles.mainContainer}>
+    <View style={styles.mainContainer}>
       <Tab.Navigator
         screenOptions={({ route }) => ({
           tabBarIcon: ({ color, size }) => {
@@ -55,7 +54,7 @@ const MainScreen = () => {
         <Tab.Screen name="Search" component={SearchScreen} />
         <Tab.Screen name="Checkout" component={CheckoutScreen} />
       </Tab.Navigator>
-    </SafeAreaView>
+    </View>
   );
 };
 

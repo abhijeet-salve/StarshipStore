@@ -16,7 +16,7 @@ const StarShipListItem = ({ ship }: { ship: Starship }) => {
 
         <AddToCart starship={ship} />
 
-        <DisplayPrice price={Number(convertedPrice)} fontSize={14} />
+        <DisplayPrice price={convertedPrice} fontSize={14} />
 
         <Text>{ship.name}</Text>
       </View>

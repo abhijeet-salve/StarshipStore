@@ -28,7 +28,7 @@ const OrderSummary = ({
         </View>
 
         <View style={styles.priceSplitItem}>
-          <Text>Total</Text>
+          <Text>Payable Amount</Text>
 
           <DisplayPrice
             price={totalPrice + getVatAmount(totalPrice)}

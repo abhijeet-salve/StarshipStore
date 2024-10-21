@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
-import DisplayPrice from "../common/DisplayPrice";
-import AddToCart from "../common/AddToCart";
+
+import CartItem from "./CartItem";
 
 const CartDetails = ({
   cartItems,
@@ -11,15 +11,7 @@ const CartDetails = ({
   totalQuantity: number;
 }) => {
   const renderCartItem = ({ item }: { item: CartItem }) => (
-    <View style={styles.card}>
-      <AddToCart starship={item} />
-      <View>
-        <Text style={styles.name}>{item.name}</Text>
-        <Text style={styles.quantity}>x {item.quantity}</Text>
-      </View>
-
-      <DisplayPrice price={item.price} fontSize={14} />
-    </View>
+    <CartItem item={item} />
   );
 
   return (
@@ -71,11 +63,6 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 14,
     fontWeight: "bold",
-    marginTop: 5,
-  },
-  quantity: {
-    fontSize: 12,
-    color: "gray",
     marginTop: 5,
   },
 });

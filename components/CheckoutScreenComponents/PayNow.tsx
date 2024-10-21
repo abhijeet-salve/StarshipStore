@@ -24,7 +24,7 @@ const PayNow = ({
   return (
     <View style={styles.stickyContainer}>
       <Text>
-        Cart total:{" "}
+        Total{"  "}
         <DisplayPrice
           price={totalPrice + getVatAmount(totalPrice)}
           fontSize={18}

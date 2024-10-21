@@ -23,6 +23,7 @@ const SearchScreen = () => {
   const fetchResults = async (query: string) => {
     setLoading(true);
     try {
+      // can be done with rtk, but can use axios as well (just 2 api by 2 different methods)
       const response = await axios.get<IGetStarShipResponse>(
         `https://swapi.dev/api/starships/?search=${query}`
       );
@@ -61,22 +62,12 @@ const SearchScreen = () => {
           />
         );
       } else {
-        return <Text>No data found</Text>;
+        return <ShowMessage message="No results found!" />;
       }
     }
 
     return (
-      <View
-        style={{
-          ...styles.container,
-          ...styles.startSearch,
-        }}
-      >
-        <Text style={styles.largeText}>
-          The galaxy is calling!{"\n"} Begin your search for the perfect
-          Starship!
-        </Text>
-      </View>
+      <ShowMessage message={`Begin your search for the perfect Starship!`} />
     );
   };
 
@@ -89,6 +80,7 @@ const SearchScreen = () => {
         onChangeText={setSearchText}
         style={styles.textInput}
       />
+
       {renderContent()}
 
       <CartBanner />
@@ -115,8 +107,21 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     color: "#000",
-    letterSpacing: 1.2,
+    letterSpacing: 0.2,
   },
 });
 
 export default SearchScreen;
+
+const ShowMessage = ({ message }: { message: string }) => {
+  return (
+    <View
+      style={{
+        ...styles.container,
+        ...styles.startSearch,
+      }}
+    >
+      <Text style={styles.largeText}>{message} </Text>
+    </View>
+  );
+};

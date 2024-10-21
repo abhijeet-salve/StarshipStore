@@ -1,76 +1,85 @@
-import React, { useState, useEffect } from "react";
-import { ActivityIndicator, FlatList, View, StyleSheet } from "react-native";
-import axios from "axios";
+import React, { useEffect } from "react";
+import {
+  ActivityIndicator,
+  FlatList,
+  View,
+  StyleSheet,
+  Text,
+} from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
 import StarShipListItem from "./StarShipListItem";
 import { GET_STAR_SHIPS_URL } from "../../utils/constants";
 import { transformApiResponse } from "../../utils/utils";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
+import { useLazyGetStarShipsQuery } from "../../redux/api/starShipsApi";
+import { addStarShips, setNextUrl } from "../../redux/slices/starShipsSlice";
 
 const StarShipList = () => {
-  const [starShips, setStarShips] = useState<Starship[]>([]);
-  const [nextUrl, setNextUrl] = useState<string | null>(GET_STAR_SHIPS_URL);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [loadingMore, setLoadingMore] = useState<boolean>(false);
-
+  const dispatch = useDispatch<AppDispatch>();
   const cartItemsLength = useSelector(
-    (state: RootState) => state.cart.items
-  ).length;
+    (state: RootState) => state.cart.items.length
+  );
 
-  const fetchStarShips = async (loadMore = false) => {
-    if (!nextUrl || loading || loadingMore) return;
+  const { starShips, nextUrl } = useSelector(
+    (state: RootState) => state.starShips
+  );
 
-    loadMore ? setLoadingMore(true) : setLoading(true);
-    try {
-      const response = await axios.get<IGetStarShipResponse>(nextUrl);
-      const { results, next } = response.data;
-
-      setStarShips((prevStarShips) => [...prevStarShips, ...results]);
-
-      setNextUrl(next);
-    } catch (error) {
-      console.error("Error fetching star ships:", error);
-    } finally {
-      loadMore ? setLoadingMore(false) : setLoading(false);
-    }
-  };
+  const [trigger, { data, error, isLoading, isFetching }] =
+    useLazyGetStarShipsQuery();
 
   useEffect(() => {
-    fetchStarShips();
+    if (!starShips.length && nextUrl === null) {
+      trigger(GET_STAR_SHIPS_URL);
+    }
   }, []);
 
+  useEffect(() => {
+    if (data) {
+      dispatch(addStarShips(data.results));
+      dispatch(setNextUrl(data.next));
+    }
+  }, [data]);
+
   const handleLoadMore = () => {
-    if (nextUrl) {
-      fetchStarShips(true);
+    if (nextUrl && !isFetching) {
+      trigger(nextUrl);
     }
   };
 
-  const renderItem = ({ item }: { item: Starship }) => {
-    return <StarShipListItem ship={item} key={item.name} />;
-  };
-
-  const renderFooter = () => {
-    if (!loadingMore) return null;
-    return <ActivityIndicator size="small" color="black" />;
-  };
-
-  if (loading)
+  if (isLoading && starShips.length === 0) {
     return (
       <View style={styles.loaderContainer}>
         <ActivityIndicator size="large" />
       </View>
     );
+  }
+
+  if (error) {
+    return (
+      <View style={styles.loaderContainer}>
+        <Text>Uh-oh! Couldn't load star ships. Try again soon!</Text>
+      </View>
+    );
+  }
+
+  const renderItem = ({ item }: { item: Starship }) => (
+    <StarShipListItem ship={item} key={item.name} />
+  );
+
+  const renderFooter = () => {
+    if (isFetching) return <ActivityIndicator size="small" color="black" />;
+    return null;
+  };
 
   return (
     <FlatList
       data={transformApiResponse(starShips)}
-      keyExtractor={(item) => item.name}
+      keyExtractor={(item) => item.name + item.manufacturer}
       renderItem={renderItem}
       numColumns={2}
       onEndReached={handleLoadMore}
       onEndReachedThreshold={0.5}
       ListFooterComponent={renderFooter}
-      columnWrapperStyle={{}}
       style={{ marginBottom: cartItemsLength > 0 ? 60 : 0 }}
     />
   );

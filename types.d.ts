@@ -1,5 +1,5 @@
 interface IGetStarShipResponse {
-  count: number; // Count is wrong from API for some reason :/
+  count: number; // total count across pagination
   next: string | null;
   previous: string | null;
   results: Starship[];
@@ -34,3 +34,5 @@ interface Starship {
   edited: string;
   url: string;
 }
+
+//Todo - Create lib folder and move all non native code to item

@@ -4,7 +4,7 @@ const initialState: CartState = {
   items: [],
 };
 
-const cartSliceWithHelper = createSlice({
+const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
@@ -42,7 +42,6 @@ const cartSliceWithHelper = createSlice({
   },
 });
 
-export const { setCartItem, removeFromCart, clearCart } =
-  cartSliceWithHelper.actions;
+export const { setCartItem, removeFromCart, clearCart } = cartSlice.actions;
 
-export default cartSliceWithHelper.reducer;
+export default cartSlice.reducer;

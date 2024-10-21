@@ -10,10 +10,10 @@ const DisplayPrice = ({
   price: number;
   fontSize: number;
 }) => {
-  const formatterPrice = formatPrice(price);
+  const formattedPrice = formatPrice(price);
   return (
     <Text style={{ fontSize: fontSize }}>
-      AED <Text style={styles.bold}>{formatterPrice}</Text>
+      AED <Text style={styles.bold}>{formattedPrice}</Text>
     </Text>
   );
 };
