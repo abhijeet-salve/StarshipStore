@@ -6,16 +6,15 @@ interface IGetStarShipResponse {
 }
 
 interface CartItem extends Starship {
-  name: string;
   price: number;
   quantity: number;
 }
 
-type CartState = {
+interface CartState {
   items: CartItem[];
-};
+}
 
-type Starship = {
+interface Starship {
   name: string;
   model: string;
   manufacturer: string;
@@ -34,4 +33,4 @@ type Starship = {
   created: string;
   edited: string;
   url: string;
-};
+}
