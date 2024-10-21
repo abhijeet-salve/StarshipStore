@@ -7,22 +7,18 @@ import {
   Text,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
-import StarShipListItem from "./StarShipListItem";
-import { GET_STAR_SHIPS_URL } from "../../utils/constants";
-import { transformApiResponse } from "../../utils/utils";
 import { useLazyGetStarShipsQuery } from "../../redux/api/starShipsApi";
 import { addStarShips, setNextUrl } from "../../redux/slices/starShipsSlice";
+import { selectCartItems } from "../../redux/selectors/cartSelectors";
+import { selectShipsState } from "../../redux/selectors/starShipsSelectors";
+import { GET_STAR_SHIPS_URL } from "../../utils/constants";
+import { transformApiResponse } from "../../utils/utils";
+import StarShipListItem from "./StarShipListItem";
 
 const StarShipList = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const cartItemsLength = useSelector(
-    (state: RootState) => state.cart.items.length
-  );
-
-  const { starShips, nextUrl } = useSelector(
-    (state: RootState) => state.starShips
-  );
+  const dispatch = useDispatch();
+  const cartItemsLength = useSelector(selectCartItems).length;
+  const { starShips, nextUrl } = useSelector(selectShipsState);
 
   const [trigger, { data, error, isLoading, isFetching }] =
     useLazyGetStarShipsQuery();
@@ -46,9 +42,9 @@ const StarShipList = () => {
     }
   };
 
-  if (isLoading && starShips.length === 0) {
+  if (isLoading) {
     return (
-      <View style={styles.loaderContainer}>
+      <View style={styles.container}>
         <ActivityIndicator size="large" />
       </View>
     );
@@ -56,7 +52,7 @@ const StarShipList = () => {
 
   if (error) {
     return (
-      <View style={styles.loaderContainer}>
+      <View style={styles.container}>
         <Text>Uh-oh! Couldn't load star ships. Try again soon!</Text>
       </View>
     );
@@ -74,7 +70,7 @@ const StarShipList = () => {
   return (
     <FlatList
       data={transformApiResponse(starShips)}
-      keyExtractor={(item) => item.name + item.manufacturer}
+      keyExtractor={(item) => `${item.name}-${item.manufacturer}`}
       renderItem={renderItem}
       numColumns={2}
       onEndReached={handleLoadMore}
@@ -88,7 +84,7 @@ const StarShipList = () => {
 export default StarShipList;
 
 const styles = StyleSheet.create({
-  loaderContainer: {
+  container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",

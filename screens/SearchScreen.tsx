@@ -1,35 +1,29 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  FlatList,
-  ActivityIndicator,
-  StyleSheet,
-} from "react-native";
+import { View, TextInput, StyleSheet } from "react-native";
 import axios from "axios";
-import StarShipListItem from "../components/ShipsList/StarShipListItem";
-import { SEARCH_DEBOUNCE_DELAY } from "../utils/constants";
+import { GET_STAR_SHIPS_URL, SEARCH_DEBOUNCE_DELAY } from "../utils/constants";
 import { transformApiResponse } from "../utils/utils";
 import CartBanner from "../components/common/CartBanner";
+import SearchResult from "../components/SearchScreenComponents/SearchResults";
 
 const SearchScreen = () => {
   const [searchText, setSearchText] = useState<string>("");
   const [results, setResults] = useState<Starship[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
 
   const filteredList = transformApiResponse(results);
 
   const fetchResults = async (query: string) => {
     setLoading(true);
     try {
-      // can be done with rtk, but can use axios as well (just 2 api by 2 different methods)
+      // can be done with rtk, but can use axios as well (2 api by 2 different methods)
       const response = await axios.get<IGetStarShipResponse>(
-        `https://swapi.dev/api/starships/?search=${query}`
+        `${GET_STAR_SHIPS_URL}?search=${query}`
       );
       setResults(response.data.results);
     } catch (error) {
-      console.error("Error fetching starships:", error);
+      setIsError(true);
     } finally {
       setLoading(false);
     }
@@ -47,30 +41,6 @@ const SearchScreen = () => {
     return () => clearTimeout(debounceFetchResults);
   }, [searchText]);
 
-  const renderContent = () => {
-    if (loading) {
-      return <ActivityIndicator size="small" color="black" />;
-    }
-
-    if (searchText.length > 0) {
-      if (filteredList.length > 0) {
-        return (
-          <FlatList
-            data={filteredList}
-            keyExtractor={(item) => item.name}
-            renderItem={({ item }) => <StarShipListItem ship={item} />}
-          />
-        );
-      } else {
-        return <ShowMessage message="No results found!" />;
-      }
-    }
-
-    return (
-      <ShowMessage message={`Begin your search for the perfect Starship!`} />
-    );
-  };
-
   return (
     <View style={styles.container}>
       <TextInput
@@ -81,7 +51,12 @@ const SearchScreen = () => {
         style={styles.textInput}
       />
 
-      {renderContent()}
+      <SearchResult
+        loading={loading}
+        isError={isError}
+        searchText={searchText}
+        filteredList={filteredList}
+      />
 
       <CartBanner />
     </View>
@@ -101,7 +76,7 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     paddingHorizontal: 10,
   },
-  startSearch: { justifyContent: "center", alignItems: "center", gap: 20 },
+  message: { justifyContent: "center", alignItems: "center", gap: 20 },
   largeText: {
     fontSize: 18,
     fontWeight: "bold",
@@ -112,16 +87,3 @@ const styles = StyleSheet.create({
 });
 
 export default SearchScreen;
-
-const ShowMessage = ({ message }: { message: string }) => {
-  return (
-    <View
-      style={{
-        ...styles.container,
-        ...styles.startSearch,
-      }}
-    >
-      <Text style={styles.largeText}>{message} </Text>
-    </View>
-  );
-};

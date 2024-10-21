@@ -22,7 +22,7 @@ const CartDetails = ({
       </Text>
       <FlatList
         data={cartItems}
-        keyExtractor={(item) => item.name}
+        keyExtractor={(item) => `${item.name}-${item.manufacturer}`}
         renderItem={renderCartItem}
         horizontal
         showsHorizontalScrollIndicator={false}

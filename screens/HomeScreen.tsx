@@ -1,6 +1,6 @@
 import React from "react";
-import StarShipList from "../components/ShipsList/StarShipList";
 import { StyleSheet, View } from "react-native";
+import StarShipList from "../components/ShipsList/StarShipList";
 import CartBanner from "../components/common/CartBanner";
 
 const HomeScreen = () => {
@@ -11,6 +11,7 @@ const HomeScreen = () => {
     </View>
   );
 };
+
 export default HomeScreen;
 
 const styles = StyleSheet.create({

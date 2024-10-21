@@ -3,7 +3,7 @@ import { GET_STAR_SHIPS_URL } from "../../utils/constants";
 
 const starShipsApi = createApi({
   reducerPath: "starShipsApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "" }), // You can set a base URL if needed
+  baseQuery: fetchBaseQuery({ baseUrl: "" }),
   endpoints: (builder) => ({
     getStarShips: builder.query<IGetStarShipResponse, string | null>({
       query: (nextUrl) => (nextUrl ? nextUrl : GET_STAR_SHIPS_URL),

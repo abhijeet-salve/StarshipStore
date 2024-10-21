@@ -35,4 +35,9 @@ interface Starship {
   url: string;
 }
 
-//Todo - Create lib folder and move all non native code to item
+interface ISearchResultsProps {
+  loading: boolean;
+  isError: boolean;
+  searchText: string;
+  filteredList: Starship[];
+}
