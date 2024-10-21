@@ -4,9 +4,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { View, Text, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/Feather";
 import { SafeAreaView } from "react-native-safe-area-context";
-import CheckoutScreen from "../screens/CheckoutScreen";
-import HomeScreen from "../screens/HomeScreen";
-import SearchScreen from "../screens/SearchScreen";
+import CheckoutScreen from "./CheckoutScreen";
+import HomeScreen from "./HomeScreen";
+import SearchScreen from "./SearchScreen";
 import { RootState } from "../redux/store";
 
 const Tab = createBottomTabNavigator();

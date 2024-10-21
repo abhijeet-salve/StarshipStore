@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 import { NavigationContainer } from "@react-navigation/native";
 import { store } from "./redux/store";
 import { StatusBar } from "react-native";
-import MainScreen from "./components/MainScreen";
+import MainScreen from "./screens/MainScreen";
 
 const App = () => {
   return (
