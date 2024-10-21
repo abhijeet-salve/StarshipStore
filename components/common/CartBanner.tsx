@@ -1,29 +1,24 @@
 import { useSelector } from "react-redux";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { useBottomNavigation } from "../../navigation/navigation";
-import { RootState } from "../../redux/store";
+import { selectTotalQuantity } from "../../redux/selectors/cartSelectors";
 
 const CartBanner = ({}: {}) => {
   const navigation = useBottomNavigation();
-  const cartItems = useSelector((state: RootState) => state.cart.items);
-
-  const totalQuantity = Object.values(cartItems).reduce(
-    (sum, item) => sum + item.quantity,
-    0
-  );
+  const totalQuantity = useSelector(selectTotalQuantity);
 
   const handleViewCart = () => {
     navigation.navigate("Checkout");
   };
 
-  if (!cartItems.length) return null;
+  if (totalQuantity === 0) return null;
 
   return (
     <View style={styles.stickyFooterContainer}>
       <Text style={styles.quantityText}>Cart Items: {totalQuantity}</Text>
 
       <TouchableOpacity style={styles.stickyPayButton} onPress={handleViewCart}>
-        <Text style={styles.stickyPayButtonText}>Checkout now</Text>
+        <Text style={styles.stickyPayButtonText}>Go to Checkout</Text>
       </TouchableOpacity>
     </View>
   );

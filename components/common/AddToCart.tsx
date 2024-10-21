@@ -6,6 +6,7 @@ import MIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { removeFromCart, setCartItem } from "../../redux/slices/cartSlice";
 import { RootState } from "../../redux/store";
 import { MAX_QUANTITY_PER_ITEM } from "../../utils/constants";
+import { getQuantityByName } from "../../redux/selectors/cartSelectors";
 
 interface IAddToCartProps {
   starship: Starship;
@@ -15,10 +16,8 @@ const AddToCart = ({ starship }: IAddToCartProps) => {
   const dispatch = useDispatch();
   const priceInAED = Number(starship.cost_in_credits) / 10000;
 
-  const quantity = useSelector(
-    (state: RootState) =>
-      state.cart.items.find((ship) => ship.name === starship.name)?.quantity ||
-      0
+  const quantity = useSelector((state: RootState) =>
+    getQuantityByName(state, starship.name)
   );
 
   const updateCart = (newQuantity: number) => {

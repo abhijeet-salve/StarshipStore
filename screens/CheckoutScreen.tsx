@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useSelector } from "react-redux";
-import { RootState } from "../redux/store";
 import { useBottomNavigation } from "../navigation/navigation";
 import CartDetails from "../components/CheckoutScreenComponents/CartDetails";
 import PaymentOptions, {
@@ -16,23 +15,20 @@ import PaymentOptions, {
 import OrderSummary from "../components/CheckoutScreenComponents/OrderSummary";
 import PayNow from "../components/CheckoutScreenComponents/PayNow";
 import Divider from "../components/common/Divider";
+import {
+  selectCartItems,
+  selectTotalPrice,
+  selectTotalQuantity,
+} from "../redux/selectors/cartSelectors";
 
 const CheckoutScreen = () => {
   const navigation = useBottomNavigation();
-  const cartItems = useSelector((state: RootState) => state.cart.items);
+  const cartItems = useSelector(selectCartItems);
+  const totalQuantity = useSelector(selectTotalQuantity);
+  const totalPrice = useSelector(selectTotalPrice);
 
   const [selectedPaymentMethod, setSelectedPaymentMethod] =
     useState<EPaymentOptions>(EPaymentOptions.CASH);
-
-  const getTotalPrice = () => {
-    return cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  };
-  const totalPrice = getTotalPrice();
-
-  const totalQuantity = Object.values(cartItems).reduce(
-    (sum, item) => sum + item.quantity,
-    0
-  );
 
   return (
     <View style={styles.container}>
