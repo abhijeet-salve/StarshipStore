@@ -103,6 +103,7 @@ const cartStyles = StyleSheet.create({
     elevation: 10,
   },
   iconButton: {
+    borderRadius: 50,
     padding: 8,
     justifyContent: "center",
     alignItems: "center",
@@ -117,11 +118,6 @@ const cartStyles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "rgb(232, 68, 66)",
     borderRadius: 16,
-  },
-  addButtonText: {
-    color: "#FFF",
-    fontSize: 16,
-    marginLeft: 5,
   },
   quantityText: {
     fontSize: 14,

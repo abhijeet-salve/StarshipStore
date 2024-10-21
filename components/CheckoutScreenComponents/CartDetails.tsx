@@ -46,23 +46,4 @@ const styles = StyleSheet.create({
   listContainer: {
     paddingVertical: 20,
   },
-  card: {
-    justifyContent: "space-between",
-    gap: 8,
-    width: 120,
-    marginRight: 15,
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    padding: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3,
-  },
-  name: {
-    fontSize: 14,
-    fontWeight: "bold",
-    marginTop: 5,
-  },
 });

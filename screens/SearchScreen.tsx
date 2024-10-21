@@ -76,14 +76,6 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     paddingHorizontal: 10,
   },
-  message: { justifyContent: "center", alignItems: "center", gap: 20 },
-  largeText: {
-    fontSize: 18,
-    fontWeight: "bold",
-    textAlign: "center",
-    color: "#000",
-    letterSpacing: 0.2,
-  },
 });
 
 export default SearchScreen;

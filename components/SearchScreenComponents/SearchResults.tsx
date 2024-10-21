@@ -19,7 +19,9 @@ const SearchResult = ({
         <FlatList
           data={filteredList}
           keyExtractor={(item) => `${item.name}-${item.manufacturer}`}
-          renderItem={({ item }) => <StarShipListItem ship={item} />}
+          renderItem={({ item }: { item: Starship }) => (
+            <StarShipListItem ship={item} />
+          )}
         />
       );
     else return <FullScreenMessage message="No Star ships found!" />;
