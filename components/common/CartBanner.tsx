@@ -3,7 +3,7 @@ import { Text, StyleSheet, View, TouchableOpacity } from 'react-native';
 import { useTabNavigation } from '../../navigation/navigation';
 import { selectTotalQuantity } from '../../redux/selectors/cartSelectors';
 
-const CartBanner = ({}: {}) => {
+const CartBanner = () => {
   const navigation = useTabNavigation();
   const totalQuantity = useSelector(selectTotalQuantity);
 
