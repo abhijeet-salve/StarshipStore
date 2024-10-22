@@ -5,7 +5,8 @@ interface IGetStarShipResponse {
   results: Starship[];
 }
 
-interface CartItem extends Starship {
+interface CartItem {
+  id: number;
   price: number;
   quantity: number;
 }
@@ -15,6 +16,7 @@ interface CartState {
 }
 
 interface Starship {
+  id: number;
   name: string;
   model: string;
   manufacturer: string;

@@ -1,26 +1,23 @@
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 import {
   ActivityIndicator,
   FlatList,
   View,
   StyleSheet,
   Text,
-} from "react-native";
-import { useDispatch, useSelector } from "react-redux";
-import { useLazyGetStarShipsQuery } from "../../redux/api/starShipsApi";
-import { addStarShips, setNextUrl } from "../../redux/slices/starShipsSlice";
-import { selectCartItems } from "../../redux/selectors/cartSelectors";
-import { selectShipsState } from "../../redux/selectors/starShipsSelectors";
-import { GET_STAR_SHIPS_URL } from "../../utils/constants";
-import { transformApiResponse } from "../../utils/utils";
-import StarShipListItem from "./StarShipListItem";
+} from 'react-native';
+import { useSelector } from 'react-redux';
+import { useLazyGetStarShipsQuery } from '../../redux/api/starShipsApi';
+import { selectCartItems } from '../../redux/selectors/cartSelectors';
+import { selectShipsState } from '../../redux/selectors/starShipsSelectors';
+import { GET_STAR_SHIPS_URL } from '../../utils/constants';
+import StarShipListItem from './StarShipListItem';
 
 const StarShipList = () => {
-  const dispatch = useDispatch();
   const cartItemsLength = useSelector(selectCartItems).length;
   const { starShips, nextUrl } = useSelector(selectShipsState);
 
-  const [trigger, { data, error, isLoading, isFetching }] =
+  const [trigger, { error, isLoading, isFetching }] =
     useLazyGetStarShipsQuery();
 
   useEffect(() => {
@@ -28,13 +25,6 @@ const StarShipList = () => {
       trigger(GET_STAR_SHIPS_URL);
     }
   }, []);
-
-  useEffect(() => {
-    if (data) {
-      dispatch(addStarShips(data.results));
-      dispatch(setNextUrl(data.next));
-    }
-  }, [data]);
 
   const handleLoadMore = () => {
     if (nextUrl && !isFetching) {
@@ -45,7 +35,7 @@ const StarShipList = () => {
   if (isLoading) {
     return (
       <View style={styles.container}>
-        <ActivityIndicator size="large" />
+        <ActivityIndicator size='large' />
       </View>
     );
   }
@@ -63,14 +53,14 @@ const StarShipList = () => {
   );
 
   const renderFooter = () => {
-    if (isFetching) return <ActivityIndicator size="small" color="black" />;
+    if (isFetching) return <ActivityIndicator size='small' color='black' />;
     return null;
   };
 
   return (
     <FlatList
-      data={transformApiResponse(starShips)}
-      keyExtractor={(item) => item.url}
+      data={starShips}
+      keyExtractor={(item) => String(item.id)}
       renderItem={renderItem}
       numColumns={2}
       onEndReached={handleLoadMore}
@@ -86,7 +76,7 @@ export default StarShipList;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

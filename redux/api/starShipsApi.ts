@@ -1,12 +1,17 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { GET_STAR_SHIPS_URL } from "../../utils/constants";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { transformApiResponse } from '../../utils/utils';
 
 const starShipsApi = createApi({
-  reducerPath: "starShipsApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "" }),
+  reducerPath: 'starShipsApi',
+  baseQuery: fetchBaseQuery({ baseUrl: '' }),
   endpoints: (builder) => ({
     getStarShips: builder.query<IGetStarShipResponse, string | null>({
-      query: (nextUrl) => (nextUrl ? nextUrl : GET_STAR_SHIPS_URL),
+      query: (nextUrl: string) => nextUrl,
+      transformResponse: (response: IGetStarShipResponse) => ({
+        ...response,
+        results: transformApiResponse(response.results),
+      }),
+      keepUnusedDataFor: 300, //seconds
     }),
   }),
 });

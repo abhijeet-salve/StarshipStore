@@ -22,9 +22,9 @@ const SearchResult = ({
       return (
         <FlatList
           data={filteredList}
-          keyExtractor={(item) => item.url}
+          keyExtractor={(item) => String(item.id)}
           renderItem={({ item }: { item: Starship }) => (
-            <StarShipListItem ship={item} />
+            <StarShipListItem ship={item} isSearch />
           )}
           style={{ marginBottom: cartItemsLength > 0 ? 60 : 0 }}
         />

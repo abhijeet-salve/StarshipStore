@@ -1,9 +1,8 @@
-import { configureStore } from "@reduxjs/toolkit";
-import logger from "redux-logger";
-import starShipsApi from "./api/starShipsApi";
-
-import starShipsReducer from "./slices/starShipsSlice";
-import cartReducer from "./slices/cartSlice";
+import { configureStore } from '@reduxjs/toolkit';
+import logger from 'redux-logger';
+import starShipsApi from './api/starShipsApi';
+import starShipsReducer from './slices/starShipsSlice';
+import cartReducer from './slices/cartSlice';
 
 export const store = configureStore({
   reducer: {

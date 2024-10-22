@@ -1,7 +1,6 @@
-import React from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
-
-import CartItem from "./CartItem";
+import React from 'react';
+import { View, Text, FlatList, StyleSheet } from 'react-native';
+import CartItem from './CartItem';
 
 const CartDetails = ({
   cartItems,
@@ -22,7 +21,7 @@ const CartDetails = ({
       </Text>
       <FlatList
         data={cartItems}
-        keyExtractor={(item) => item.url}
+        keyExtractor={(item) => String(item.id)}
         renderItem={renderCartItem}
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -36,12 +35,12 @@ export default CartDetails;
 const styles = StyleSheet.create({
   header: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   subHeader: {
     fontSize: 18,
-    fontWeight: "normal",
-    color: "gray",
+    fontWeight: 'normal',
+    color: 'gray',
   },
   listContainer: {
     paddingVertical: 20,

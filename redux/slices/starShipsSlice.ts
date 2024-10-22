@@ -1,39 +1,59 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import starShipsApi from '../api/starShipsApi';
 
 interface starShipsState {
   starShips: Starship[];
   nextUrl: string | null;
+  loading: boolean;
+  error: boolean;
 }
 
 const initialState: starShipsState = {
   starShips: [],
   nextUrl: null,
+  loading: false,
+  error: false,
 };
 
-const starShipsStateSlice = createSlice({
+const starShipsSlice = createSlice({
   name: 'starShips',
-  initialState,
+  initialState: initialState,
   reducers: {
-    addStarShips: (state, action: PayloadAction<Starship[]>) => {
-      const existingUrls = new Set(state.starShips.map((ship) => ship.url));
+    addStarship: (state, action: PayloadAction<Starship>) => {
+      state.starShips.push(action.payload);
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addMatcher(starShipsApi.endpoints.getStarShips.matchPending, (state) => {
+        state.loading = true;
+      })
+      .addMatcher(
+        starShipsApi.endpoints.getStarShips.matchFulfilled,
+        (state, action) => {
+          state.loading = false;
+          state.nextUrl = action.payload.next;
 
-      // safe check to avoid adding duplicate item, can be or not be depending on the business requirement.
-      const newStarShips = action.payload.filter(
-        (newShip) => !existingUrls.has(newShip.url)
+          action.payload.results.forEach((newStarship: Starship) => {
+            const exists = state.starShips.some(
+              (ship) => ship.name === newStarship.name
+            );
+            if (!exists) {
+              state.starShips.push(newStarship);
+            }
+          });
+        }
+      )
+      .addMatcher(
+        starShipsApi.endpoints.getStarShips.matchRejected,
+        (state) => {
+          state.loading = false;
+          state.error = true;
+        }
       );
-
-      state.starShips = [...state.starShips, ...newStarShips];
-    },
-    setNextUrl: (state, action: PayloadAction<string | null>) => {
-      state.nextUrl = action.payload;
-    },
-    resetStarShips: (state) => {
-      state.starShips = [];
-      state.nextUrl = null;
-    },
   },
 });
 
-export const { addStarShips, setNextUrl, resetStarShips } =
-  starShipsStateSlice.actions;
-export default starShipsStateSlice.reducer;
+export const { addStarship } = starShipsSlice.actions;
+
+export default starShipsSlice.reducer;

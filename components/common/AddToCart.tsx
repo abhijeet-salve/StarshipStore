@@ -1,12 +1,15 @@
-import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
-import Icon from "react-native-vector-icons/AntDesign";
-import MIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { removeFromCart, setCartItem } from "../../redux/slices/cartSlice";
-import { RootState } from "../../redux/store";
-import { MAX_QUANTITY_PER_ITEM } from "../../utils/constants";
-import { getQuantityByName } from "../../redux/selectors/cartSelectors";
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import Icon from 'react-native-vector-icons/AntDesign';
+import MIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { removeFromCart, setCartItem } from '../../redux/slices/cartSlice';
+import { RootState } from '../../redux/store';
+import { MAX_QUANTITY_PER_ITEM } from '../../utils/constants';
+import { getQuantityById } from '../../redux/selectors/cartSelectors';
+import { addStarship } from '../../redux/slices/starShipsSlice';
+import { selectStarships } from '../../redux/selectors/starShipsSelectors';
+import { convertCreditsToAED } from '../../utils/priceUtil';
 
 interface IAddToCartProps {
   starship: Starship;
@@ -14,22 +17,26 @@ interface IAddToCartProps {
 
 const AddToCart = ({ starship }: IAddToCartProps) => {
   const dispatch = useDispatch();
-  const priceInAED = Number(starship.cost_in_credits) / 10000;
+  const priceInAED = convertCreditsToAED(starship.cost_in_credits);
 
   const quantity = useSelector((state: RootState) =>
-    getQuantityByName(state, starship.name)
+    getQuantityById(state, starship.id)
   );
 
+  const startShipInStore = useSelector(selectStarships);
+
   const updateCart = (newQuantity: number) => {
-    dispatch(
-      newQuantity > 0
-        ? setCartItem({
-            ...starship,
-            price: priceInAED,
-            quantity: newQuantity,
-          })
-        : removeFromCart(starship.name)
-    );
+    if (newQuantity > 0) {
+      dispatch(
+        setCartItem({
+          id: starship.id,
+          price: priceInAED,
+          quantity: newQuantity,
+        })
+      );
+    } else {
+      dispatch(removeFromCart(starship.id));
+    }
   };
 
   const modifyQuantity = (delta: number) => {
@@ -39,7 +46,13 @@ const AddToCart = ({ starship }: IAddToCartProps) => {
     }
   };
 
-  const increaseQuantity = () => modifyQuantity(1);
+  const increaseQuantity = () => {
+    const exists = startShipInStore.some((ship) => ship.id === starship.id);
+
+    if (!exists) dispatch(addStarship(starship));
+
+    modifyQuantity(1);
+  };
 
   const decreaseQuantity = () => modifyQuantity(-1);
 
@@ -50,7 +63,7 @@ const AddToCart = ({ starship }: IAddToCartProps) => {
           style={cartStyles.addButton}
           onPress={increaseQuantity}
         >
-          <Icon name="plus" size={18} />
+          <Icon name='plus' size={18} />
         </TouchableOpacity>
       ) : (
         <View style={cartStyles.quantityContainer}>
@@ -59,9 +72,9 @@ const AddToCart = ({ starship }: IAddToCartProps) => {
             onPress={decreaseQuantity}
           >
             {quantity === 1 ? (
-              <MIcon name={"delete-outline"} color="#fff" size={18} />
+              <MIcon name={'delete-outline'} color='#fff' size={18} />
             ) : (
-              <Icon name={"minus"} color="#fff" size={18} />
+              <Icon name={'minus'} color='#fff' size={18} />
             )}
           </TouchableOpacity>
 
@@ -69,14 +82,14 @@ const AddToCart = ({ starship }: IAddToCartProps) => {
 
           {quantity === MAX_QUANTITY_PER_ITEM ? (
             <View style={cartStyles.iconButton}>
-              <MIcon name="cancel" color="#fff" size={18} />
+              <MIcon name='cancel' color='#fff' size={18} />
             </View>
           ) : (
             <TouchableOpacity
               style={cartStyles.iconButton}
               onPress={increaseQuantity}
             >
-              <Icon name="plus" color="#fff" size={18} />
+              <Icon name='plus' color='#fff' size={18} />
             </TouchableOpacity>
           )}
         </View>
@@ -87,16 +100,16 @@ const AddToCart = ({ starship }: IAddToCartProps) => {
 
 const cartStyles = StyleSheet.create({
   container: {
-    flexDirection: "column",
-    alignItems: "flex-end",
+    flexDirection: 'column',
+    alignItems: 'flex-end',
   },
   addButton: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 50,
     padding: 8,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "black",
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: 'black',
     shadowOffset: { width: 4, height: 6 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -105,24 +118,24 @@ const cartStyles = StyleSheet.create({
   iconButton: {
     borderRadius: 50,
     padding: 8,
-    justifyContent: "center",
-    alignItems: "center",
-    shadowColor: "black",
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: 'black',
     shadowOffset: { width: 4, height: 6 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 10,
   },
   quantityContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "rgb(232, 68, 66)",
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgb(232, 68, 66)',
     borderRadius: 16,
   },
   quantityText: {
     fontSize: 14,
-    fontWeight: "bold",
-    color: "#FFF",
+    fontWeight: 'bold',
+    color: '#FFF',
     paddingHorizontal: 2,
   },
 });

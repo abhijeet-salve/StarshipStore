@@ -1,16 +1,22 @@
-import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
-import { convertCreditsToAED } from "../../utils/priceUtil";
-import DisplayPrice from "../common/DisplayPrice";
-import AddToCart from "../common/AddToCart";
+import React from 'react';
+import { View, Text, Image, StyleSheet } from 'react-native';
+import { convertCreditsToAED } from '../../utils/priceUtil';
+import DisplayPrice from '../common/DisplayPrice';
+import AddToCart from '../common/AddToCart';
 
-const StarShipListItem = ({ ship }: { ship: Starship }) => {
+const StarShipListItem = ({
+  ship,
+  isSearch = false,
+}: {
+  ship: Starship;
+  isSearch?: boolean;
+}) => {
   const convertedPrice = convertCreditsToAED(ship.cost_in_credits);
   return (
     <>
       <View style={styles.itemContainer}>
         <Image
-          source={{ uri: "https://picsum.photos/200/200" }}
+          source={{ uri: 'https://picsum.photos/200/200' }}
           style={styles.image}
         />
 
@@ -24,19 +30,19 @@ const StarShipListItem = ({ ship }: { ship: Starship }) => {
   );
 };
 
-export default StarShipListItem;
+export default React.memo(StarShipListItem);
 
 const styles = StyleSheet.create({
   itemContainer: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     padding: 10,
     margin: 6,
     gap: 6,
     borderRadius: 12,
   },
   image: {
-    width: "auto",
+    width: 'auto',
     height: 100,
     borderRadius: 8,
   },
