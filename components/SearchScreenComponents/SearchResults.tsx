@@ -24,7 +24,7 @@ const SearchResult = ({
           data={filteredList}
           keyExtractor={(item) => String(item.id)}
           renderItem={({ item }: { item: Starship }) => (
-            <StarShipListItem ship={item} isSearch />
+            <StarShipListItem ship={item} />
           )}
           style={{ marginBottom: cartItemsLength > 0 ? 60 : 0 }}
         />

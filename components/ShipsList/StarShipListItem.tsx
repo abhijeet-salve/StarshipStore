@@ -4,13 +4,7 @@ import { convertCreditsToAED } from '../../utils/priceUtil';
 import DisplayPrice from '../common/DisplayPrice';
 import AddToCart from '../common/AddToCart';
 
-const StarShipListItem = ({
-  ship,
-  isSearch = false,
-}: {
-  ship: Starship;
-  isSearch?: boolean;
-}) => {
+const StarShipListItem = ({ ship }: { ship: Starship }) => {
   const convertedPrice = convertCreditsToAED(ship.cost_in_credits);
   return (
     <>
