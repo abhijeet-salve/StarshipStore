@@ -1,12 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import starShipsApi from '../api/starShipsApi';
-
-interface starShipsState {
-  starShips: Starship[];
-  nextUrl: string | null;
-  loading: boolean;
-  error: boolean;
-}
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import starShipsApi from "../api/starShipsApi";
 
 const initialState: starShipsState = {
   starShips: [],
@@ -16,7 +9,7 @@ const initialState: starShipsState = {
 };
 
 const starShipsSlice = createSlice({
-  name: 'starShips',
+  name: "starShips",
   initialState: initialState,
   reducers: {
     addStarship: (state, action: PayloadAction<Starship>) => {
