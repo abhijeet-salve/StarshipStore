@@ -5,6 +5,13 @@ interface IGetStarShipResponse {
   results: Starship[];
 }
 
+interface starShipsState {
+  starShips: Starship[];
+  nextUrl: string | null;
+  loading: boolean;
+  error: boolean;
+}
+
 interface CartItem {
   id: number;
   price: number;
