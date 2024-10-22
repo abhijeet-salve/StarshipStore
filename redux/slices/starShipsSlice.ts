@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface starShipsState {
   starShips: Starship[];
@@ -11,11 +11,18 @@ const initialState: starShipsState = {
 };
 
 const starShipsStateSlice = createSlice({
-  name: "starShips",
+  name: 'starShips',
   initialState,
   reducers: {
     addStarShips: (state, action: PayloadAction<Starship[]>) => {
-      state.starShips = [...state.starShips, ...action.payload];
+      const existingUrls = new Set(state.starShips.map((ship) => ship.url));
+
+      // safe check to avoid adding duplicate item, can be or not be depending on the business requirement.
+      const newStarShips = action.payload.filter(
+        (newShip) => !existingUrls.has(newShip.url)
+      );
+
+      state.starShips = [...state.starShips, ...newStarShips];
     },
     setNextUrl: (state, action: PayloadAction<string | null>) => {
       state.nextUrl = action.payload;

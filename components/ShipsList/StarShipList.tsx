@@ -70,7 +70,7 @@ const StarShipList = () => {
   return (
     <FlatList
       data={transformApiResponse(starShips)}
-      keyExtractor={(item) => `${item.name}-${item.manufacturer}`}
+      keyExtractor={(item) => item.url}
       renderItem={renderItem}
       numColumns={2}
       onEndReached={handleLoadMore}
