@@ -26,7 +26,7 @@ const StarShipList = () => {
     if (!starShips.length && nextUrl === null) {
       trigger(GET_STAR_SHIPS_URL);
     }
-  }, []);
+  }, [starShips.length, nextUrl,trigger]);
 
   const handleLoadMore = () => {
     if (nextUrl && !isFetching) {
