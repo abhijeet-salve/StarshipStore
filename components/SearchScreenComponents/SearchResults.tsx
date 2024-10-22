@@ -1,7 +1,9 @@
-import React from "react";
-import { FlatList, ActivityIndicator } from "react-native";
-import FullScreenMessage from "./FullScreenMessage";
-import StarShipListItem from "../ShipsList/StarShipListItem";
+import React from 'react';
+import { FlatList, ActivityIndicator } from 'react-native';
+import FullScreenMessage from './FullScreenMessage';
+import StarShipListItem from '../ShipsList/StarShipListItem';
+import { useSelector } from 'react-redux';
+import { selectCartItems } from '../../redux/selectors/cartSelectors';
 
 const SearchResult = ({
   loading,
@@ -9,9 +11,11 @@ const SearchResult = ({
   searchText,
   filteredList,
 }: ISearchResultsProps) => {
-  if (loading) return <ActivityIndicator size="small" color="black" />;
+  const cartItemsLength = useSelector(selectCartItems).length;
 
-  if (isError) return <FullScreenMessage message="Something went wrong!" />;
+  if (loading) return <ActivityIndicator size='small' color='black' />;
+
+  if (isError) return <FullScreenMessage message='Something went wrong!' />;
 
   if (searchText.length > 0) {
     if (filteredList.length > 0)
@@ -22,10 +26,10 @@ const SearchResult = ({
           renderItem={({ item }: { item: Starship }) => (
             <StarShipListItem ship={item} />
           )}
-          style={{ marginBottom: filteredList.length > 0 ? 60 : 0 }}
+          style={{ marginBottom: cartItemsLength > 0 ? 60 : 0 }}
         />
       );
-    else return <FullScreenMessage message="No Star ships found!" />;
+    else return <FullScreenMessage message='No Star ships found!' />;
   }
 
   return (
