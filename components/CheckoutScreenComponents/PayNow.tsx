@@ -18,10 +18,10 @@ const PayNow = ({
   const navigation = useAppNavigation();
 
   const handlePlaceOrder = () => {
+    navigation.navigate('Payment');
+
     //can add safe check for no payment method but not needed as default is Cash.
     dispatch(clearCart());
-
-    navigation.navigate('PaymentSuccess');
   };
 
   return (

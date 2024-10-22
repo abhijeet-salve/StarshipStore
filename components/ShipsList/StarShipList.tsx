@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -20,6 +20,8 @@ const StarShipList = () => {
   const [trigger, { error, isLoading, isFetching }] =
     useLazyGetStarShipsQuery();
 
+  const [refreshing, setRefreshing] = useState(false);
+
   useEffect(() => {
     if (!starShips.length && nextUrl === null) {
       trigger(GET_STAR_SHIPS_URL);
@@ -30,6 +32,21 @@ const StarShipList = () => {
     if (nextUrl && !isFetching) {
       trigger(nextUrl);
     }
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await trigger(GET_STAR_SHIPS_URL);
+    setRefreshing(false);
+  };
+
+  const renderItem = ({ item }: { item: Starship }) => (
+    <StarShipListItem ship={item} key={item.name} />
+  );
+
+  const renderFooter = () => {
+    if (isFetching) return <ActivityIndicator size='small' color='black' />;
+    return null;
   };
 
   if (isLoading) {
@@ -48,15 +65,6 @@ const StarShipList = () => {
     );
   }
 
-  const renderItem = ({ item }: { item: Starship }) => (
-    <StarShipListItem ship={item} key={item.name} />
-  );
-
-  const renderFooter = () => {
-    if (isFetching) return <ActivityIndicator size='small' color='black' />;
-    return null;
-  };
-
   return (
     <FlatList
       data={starShips}
@@ -65,6 +73,8 @@ const StarShipList = () => {
       numColumns={2}
       onEndReached={handleLoadMore}
       onEndReachedThreshold={0.5}
+      refreshing={refreshing}
+      onRefresh={onRefresh}
       ListFooterComponent={renderFooter}
       style={{ marginBottom: cartItemsLength > 0 ? 60 : 0 }}
     />

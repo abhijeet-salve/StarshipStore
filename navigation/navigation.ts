@@ -8,7 +8,7 @@ export type TabParamList = {
   Checkout: undefined;
 };
 export type StackParamList = {
-  PaymentSuccess: undefined;
+  Payment: undefined;
 };
 
 export const useTabNavigation = () => {

@@ -51,7 +51,7 @@ const MainScreen = () => {
         />
         <Stack.Screen
           options={{ headerShown: false }}
-          name='PaymentSuccess'
+          name='Payment'
           component={PaymentScreen}
         />
       </Stack.Navigator>
